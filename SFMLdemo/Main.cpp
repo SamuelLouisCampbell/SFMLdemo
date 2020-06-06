@@ -3,19 +3,19 @@
 #include<iostream>
 #include<thread>
 #include"SocketHandle.h"
+#include <memory>
+#include <vector>
 
 int main()
 {
-	SocketHandle s = { false, 8000 };
-	sf::RenderWindow window(sf::VideoMode(1920, 1080), "A&B text render");
+	const int port = 8000; 
+	const std::string info = "A&B text render, bound to port: " + std::to_string(port); 
+	SocketHandle s = { false, port };
+	sf::RenderWindow window(sf::VideoMode(1920, 1080), info.c_str());
 
 
-	sf::Text text; 
 	sf::Font font; 
-	text.setFont(font);
-	text.setCharacterSize(72);
-	text.setFillColor(sf::Color::White);
-	text.setPosition(window.getSize().x / 2, window.getSize().y /2);
+
 
 	if (!font.loadFromFile("Helvetica.ttf"))
 	{
@@ -27,16 +27,25 @@ int main()
 	}
 	while (window.isOpen())
 	{
+		std::vector<std::unique_ptr<sf::Text>> vec; 
+		vec.push_back(std::move(std::make_unique<sf::Text>()));
+		//sf::Text text; 
+
+		vec[0]->setFont(font);
+		vec[0]->setCharacterSize(72);
+		vec[0]->setFillColor(sf::Color::White);
+		vec[0]->setPosition(window.getSize().x / 2, window.getSize().y / 2);
 		//Get messages from UDP socket.
-		
-		text.setString(s.GetMessages());
+		std::string message = s.GetMessages();
+
+		vec[0]->setString(message);
 		
 		//Centre justify string
-		if (text.getString().getSize() >= 1)
+		if (vec[0]->getString().getSize() >= 1)
 		{
-			float offsetX = text.getLocalBounds().width;
-			float offsetY = text.getLocalBounds().height;
-			text.setPosition((window.getSize().x / 2) - (offsetX/2), (window.getSize().y / 2) - (offsetY / 2));
+			float offsetX = vec[0]->getLocalBounds().width;
+			float offsetY = vec[0]->getLineSpacing();
+			vec[0]->setPosition((window.getSize().x / 2) - (offsetX/2), (window.getSize().y / 2) - (offsetY / 2));
 		}
 
 		//Draw window and contents
@@ -47,7 +56,7 @@ int main()
 				window.close();
 		}
 		window.clear();
-		window.draw(text);
+		window.draw(*vec[0]);
 		window.display();
 		//sleep a while
 		using namespace std::chrono_literals;

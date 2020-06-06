@@ -26,6 +26,23 @@ int main()
 	while (!quitter)
 	{
 		char c = _getch();
+		
+		if (c == '\b')
+		{
+			if (message.size() > 0)
+			{
+				message.pop_back();
+			}
+		}
+		else if (c == '\r')
+		{
+			message += "\n";
+		}
+		else
+		{
+			message += c; 
+		}
+		
 		if (s.send(message.c_str(), 255, recipient, port) != sf::Socket::Done)
 		{
 			std::cout << "data send fail" << std::endl;
