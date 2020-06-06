@@ -17,7 +17,7 @@ std::string SocketHandle::GetMessages()
 	{
 		std::cout << "no message detected" << std::endl;
 	}
-	std::cout << "Received " << received << " bytes from " << sender << " on port " << port << std::endl;
+	std::cout << "Received " << received << " bytes from " << sender << " on port " << port;
 	std::cout << data << std::endl;
 	std::string message = data; 
 	return message; 

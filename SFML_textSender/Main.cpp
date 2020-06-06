@@ -19,9 +19,9 @@ int main()
 	{
 		std::cout << "socket creation success!" << std::endl;
 	}
-	std::string message = '\0';
+	std::string message = "\0";
 	sf::IpAddress recipient = "127.0.0.1";
-	unsigned short port = 7001;
+	unsigned short port = 8000;
 	while (!quitter)
 	{
 		/*using namespace std::chrono_literals;
