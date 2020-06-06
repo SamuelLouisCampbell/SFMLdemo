@@ -22,6 +22,7 @@ int main()
 	std::string message = "\0";
 	sf::IpAddress recipient = "127.0.0.1";
 	unsigned short port = 8000;
+	std::cout << "Recipient address : " << recipient << std::endl << "Recipient port : " << port << std::endl; 
 	while (!quitter)
 	{
 		/*using namespace std::chrono_literals;
