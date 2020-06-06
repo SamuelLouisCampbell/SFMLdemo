@@ -25,27 +25,7 @@ int main()
 	std::cout << "Recipient address : " << recipient << std::endl << "Recipient port : " << port << std::endl; 
 	while (!quitter)
 	{
-		/*using namespace std::chrono_literals;
-		auto start = std::chrono::high_resolution_clock::now();
-		std::this_thread::sleep_for(0.05s);
-		auto end = std::chrono::high_resolution_clock::now();
-
-		std::chrono::duration<float, std::milli> elapsed = end - start;*/
-		//+ std::to_string(elapsed.count());
-
 		char c = _getch();
-		if (c == '\b')
-		{
-			if (message.size() > 0)
-			{
-				message.pop_back();
-			}
-		}
-		else
-		{
-			message += c; 
-		}
-
 		if (s.send(message.c_str(), 255, recipient, port) != sf::Socket::Done)
 		{
 			std::cout << "data send fail" << std::endl;
@@ -55,6 +35,7 @@ int main()
 			std::cout << "sending >>" << message << std::endl;
 		}
 	}
+	s.unbind();
 	std::cin.get();
 	return 0; 
 }

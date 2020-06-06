@@ -28,15 +28,17 @@ int main()
 	while (window.isOpen())
 	{
 		//Get messages from UDP socket.
+		
 		text.setString(s.GetMessages());
 		
 		//Centre justify string
 		if (text.getString().getSize() >= 1)
 		{
-			int offset = text.getLocalBounds().width;
-			text.setPosition((window.getSize().x / 2) - (offset/2), window.getSize().y / 2);
+			float offsetX = text.getLocalBounds().width;
+			float offsetY = text.getLocalBounds().height;
+			text.setPosition((window.getSize().x / 2) - (offsetX/2), (window.getSize().y / 2) - (offsetY / 2));
 		}
-	
+
 		//Draw window and contents
 		sf::Event event;
 		while (window.pollEvent(event))
