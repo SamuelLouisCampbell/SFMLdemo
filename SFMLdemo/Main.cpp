@@ -27,17 +27,17 @@ int main()
 	}
 	while (window.isOpen())
 	{
-		int lineIndex = 0; 
+
 		//Get messages from UDP socket.
 		std::string message = s.GetMessages();
 		std::vector<std::string> stringies;
-		//std::string message = "Hello\nYou\nSexy\nMan";
+
 		while (message.find('\n') != std::string::npos)
 		{
 			std::string temp = message.substr(0, message.find('\n'));
 			stringies.push_back(temp);
 			message.erase(0, message.find('\n') + 1);
-			//(std::move(std::make_unique<std::string>(message.begin(), message.find('\n'))));	
+	
 		}
 		stringies.push_back(message);
 	

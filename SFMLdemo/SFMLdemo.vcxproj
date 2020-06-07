@@ -140,9 +140,11 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="SocketHandle.cpp" />
+    <ClCompile Include="Stringhandling.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SocketHandle.h" />
+    <ClInclude Include="Stringhandling.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

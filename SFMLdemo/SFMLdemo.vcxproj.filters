@@ -21,9 +21,15 @@
     <ClCompile Include="SocketHandle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Stringhandling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SocketHandle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stringhandling.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
