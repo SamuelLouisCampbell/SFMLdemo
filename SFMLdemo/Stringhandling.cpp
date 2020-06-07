@@ -2,13 +2,15 @@
 
 
 
-Stringhandling::Stringhandling(const std::string message, const sf::RenderWindow& window, const sf::Font font, const float size)
+Stringhandling::Stringhandling(const std::string message_in, const sf::RenderWindow& window, const sf::Font font, const float size)
 	:
-	message(message),
+	message(message_in),
 	window(window),
 	size(size),
 	font(font)
 {
+	makeVecStrings(message, stringies);
+	makeVecText(vec);
 }
 
 void Stringhandling::Draw(sf::RenderWindow& window) const 
@@ -19,50 +21,47 @@ void Stringhandling::Draw(sf::RenderWindow& window) const
 	}
 }
 
-std::vector<std::string> Stringhandling::makeVecStrings(std::string& message)
+void Stringhandling::makeVecStrings(const std::string& message_in, std::vector<std::string>& str)
 {
-	std::vector<std::string> stringies;
-	while (message.find('\n') != std::string::npos)
+	std::string message = message_in;
+		if (message.size() >= 1)
 	{
-		std::string temp = message.substr(0, message.find('\n'));
-		stringies.push_back(temp);
-		message.erase(0, message.find('\n') + 1);
+		while (message.find('\n') != std::string::npos)
+		{
+			std::string temp = message.substr(0, message.find('\n'));
+			str.push_back(temp);
+			message.erase(0, message.find('\n') + 1);
 
+		}
+		str.push_back(message);
 	}
-	stringies.push_back(message);
-	return stringies;
 }
 
-std::vector<std::unique_ptr<sf::Text>> Stringhandling::makeVecText( const std::vector<std::string>& stringies, 
-																	const sf::Font& font, 
-																	const sf::RenderWindow&  window, 
-																	const float& size)
+void Stringhandling::makeVecText(std::vector<std::unique_ptr<sf::Text>>& veccer)
 {
-	std::vector<std::unique_ptr<sf::Text>> vec;
 	for (int i = 0; i < stringies.size(); ++i)
 	{
-		vec.push_back(std::move(std::make_unique<sf::Text>()));
-		vec[i]->setFont(font);
-		vec[i]->setCharacterSize(size);
-		vec[i]->setFillColor(sf::Color::White);
-		vec[i]->setPosition(window.getSize().x / 2, window.getSize().y / 2);
-		vec[i]->setString(stringies[i]);
+		veccer.push_back(std::move(std::make_unique<sf::Text>()));
+		veccer[i]->setFont(font);
+		veccer[i]->setCharacterSize(size);
+		veccer[i]->setFillColor(sf::Color::White);
+		veccer[i]->setPosition(window.getSize().x / 2, window.getSize().y / 2);
+		veccer[i]->setString(stringies[i]);
 
 		//Centre current string
-		if (vec[i]->getString().getSize() >= 1)
+		if (veccer[i]->getString().getSize() >= 1)
 		{
 
-			float offsetX = vec[i]->getLocalBounds().width;
-			vec[i]->setPosition((window.getSize().x / 2) - (offsetX / 2), window.getSize().y / 2);
+			float offsetX = veccer[i]->getLocalBounds().width;
+			veccer[i]->setPosition((window.getSize().x / 2) - (offsetX / 2), window.getSize().y / 2);
 
 
 		}
 	}
-	float totalSize = -(size * vec.size()) / 2.0f;
-	for (int i = 0; i < vec.size(); ++i)
+	float totalSize = -(size * veccer.size()) / 2.0f;
+	for (int i = 0; i < veccer.size(); ++i)
 	{
-		vec[i]->move(0, totalSize);
+		veccer[i]->move(0, totalSize);
 		totalSize += size;
 	}
-	return vec; 
 }
