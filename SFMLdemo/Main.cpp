@@ -15,7 +15,7 @@ int main()
 
 
 	sf::Font font; 
-
+	const float size = 72.0f;
 
 	if (!font.loadFromFile("Helvetica.ttf"))
 	{
@@ -27,26 +27,49 @@ int main()
 	}
 	while (window.isOpen())
 	{
-		std::vector<std::unique_ptr<sf::Text>> vec; 
-		vec.push_back(std::move(std::make_unique<sf::Text>()));
-		//sf::Text text; 
-
-		vec[0]->setFont(font);
-		vec[0]->setCharacterSize(72);
-		vec[0]->setFillColor(sf::Color::White);
-		vec[0]->setPosition(window.getSize().x / 2, window.getSize().y / 2);
+		int lineIndex = 0; 
 		//Get messages from UDP socket.
 		std::string message = s.GetMessages();
-
-		vec[0]->setString(message);
-		
-		//Centre justify string
-		if (vec[0]->getString().getSize() >= 1)
+		std::vector<std::string> stringies;
+		//std::string message = "Hello\nYou\nSexy\nMan";
+		while (message.find('\n') != std::string::npos)
 		{
-			float offsetX = vec[0]->getLocalBounds().width;
-			float offsetY = vec[0]->getLineSpacing();
-			vec[0]->setPosition((window.getSize().x / 2) - (offsetX/2), (window.getSize().y / 2) - (offsetY / 2));
+			std::string temp = message.substr(0, message.find('\n'));
+			stringies.push_back(temp);
+			message.erase(0, message.find('\n') + 1);
+			//(std::move(std::make_unique<std::string>(message.begin(), message.find('\n'))));	
 		}
+		stringies.push_back(message);
+	
+		//vectors of text objects.
+		std::vector<std::unique_ptr<sf::Text>> vec; 
+		for (int i = 0; i < stringies.size(); ++i)
+			{
+				vec.push_back(std::move(std::make_unique<sf::Text>()));
+				vec[i]->setFont(font);
+				vec[i]->setCharacterSize(size);
+				vec[i]->setFillColor(sf::Color::White);
+				vec[i]->setPosition(window.getSize().x / 2, window.getSize().y / 2);
+				vec[i]->setString(stringies[i]);
+
+				//Centre current string
+				if (vec[i]->getString().getSize() >= 1)
+				{
+					
+					float offsetX = vec[i]->getLocalBounds().width;
+					vec[i]->setPosition((window.getSize().x / 2) - (offsetX / 2), window.getSize().y / 2);
+										
+					
+				}
+			}
+		float totalSize = -(size * vec.size()) / 2.0f;
+		for (int i = 0; i < vec.size(); ++i)
+		{
+			vec[i]->move(0, totalSize);
+			totalSize += size;
+
+		}
+
 
 		//Draw window and contents
 		sf::Event event;
@@ -56,8 +79,12 @@ int main()
 				window.close();
 		}
 		window.clear();
-		window.draw(*vec[0]);
+		for (int i = 0; i < stringies.size(); ++i)
+		{
+			window.draw(*vec[i]);
+		}
 		window.display();
+
 		//sleep a while
 		using namespace std::chrono_literals;
 		std::this_thread::sleep_for(0.05s);
